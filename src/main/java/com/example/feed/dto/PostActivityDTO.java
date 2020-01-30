@@ -13,4 +13,5 @@ import lombok.Setter;
 public class PostActivityDTO {
     private PostDTO postDTO;
     private String userFriendId;
+    private String message;
 }

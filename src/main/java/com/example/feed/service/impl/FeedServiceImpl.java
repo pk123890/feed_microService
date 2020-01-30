@@ -66,8 +66,11 @@ public class FeedServiceImpl implements FeedService {
         Feed feed = new Feed();
         FeedDTO feedDTO = feedRepository.findByUserId(postActivityDTO.getUserFriendId());
         List<PostDTO> postProxyList = new ArrayList<>();
+        List<String> messageList=new ArrayList<>();
+        messageList.add(postActivityDTO.getMessage());
         postProxyList.add(postActivityDTO.getPostDTO());
         feedDTO.setPostDTOList(postProxyList);
+        feedDTO.setMessages(messageList);
         BeanUtils.copyProperties(feedDTO, feed);
         feedRepository.save(feed);
         return feed.getUserId();
