@@ -31,14 +31,14 @@ public class FeedServiceImpl implements FeedService {
     PostProxy postProxy;
 
     @Override
-    public FeedDTO getFeed(Long userId) {
+    public FeedDTO getFeed(String userId) {
         Feed feed = new Feed();
         FeedDTO feedDTO = new FeedDTO();
         List<PostDTO> postDTOList = postProxy.postByUserId(userId);
         List<String> messages = new ArrayList<>();
         BaseResponse<UserDTO> userProxyFriendsList = userProxy.getFriendsList(userId);
-        HashSet<Long> friendIds = userProxyFriendsList.getData().getFriendIds();
-        List<Long> friendList = new ArrayList<>(friendIds);
+        HashSet<String> friendIds = userProxyFriendsList.getData().getFriendIds();
+        List<String> friendList = new ArrayList<>(friendIds);
         List<PostDTO> postsDTOList = postProxy.getPostsByUserIds(friendList);
         messages.add("Posted");
         feed.setUserId(userId);
@@ -53,16 +53,16 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public List<PostDTO> getFriendsFeed(Long userId) {
+    public List<PostDTO> getFriendsFeed(String userId) {
         BaseResponse<UserDTO> userProxyFriendsList = userProxy.getFriendsList(userId);
-        HashSet<Long> friendIds = userProxyFriendsList.getData().getFriendIds();
-        List<Long> friendList = new ArrayList<>(friendIds);
+        HashSet<String> friendIds = userProxyFriendsList.getData().getFriendIds();
+        List<String> friendList = new ArrayList<>(friendIds);
         List<PostDTO> postDTOList = postProxy.getPostsByUserIds(friendList);
         return postDTOList;
     }
 
     @Override
-    public Long addPostInFeedAfterActivity(PostActivityDTO postActivityDTO) {
+    public String addPostInFeedAfterActivity(PostActivityDTO postActivityDTO) {
         Feed feed = new Feed();
         FeedDTO feedDTO = feedRepository.findByUserId(postActivityDTO.getUserFriendId());
         List<PostDTO> postProxyList = new ArrayList<>();

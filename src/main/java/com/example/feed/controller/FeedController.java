@@ -15,13 +15,13 @@ public class FeedController {
     FeedService feedService;
 
     @GetMapping("/getfeed/{userId}")
-    public FeedDTO getFeed(@PathVariable("userId") Long userId) {
+    public FeedDTO getFeed(@PathVariable("userId") String userId) {
         FeedDTO feedDTO=feedService.getFeed(userId);
         return feedDTO;
     }
 
     @PostMapping("/addPostAfterActivity")
-    public Long addPostAfterActivity(@RequestBody PostActivityDTO postActivityDTO){
+    public String addPostAfterActivity(@RequestBody PostActivityDTO postActivityDTO){
         return feedService.addPostInFeedAfterActivity(postActivityDTO);
     }
 

@@ -12,8 +12,8 @@ import java.util.List;
 @FeignClient(name = "post", url = "http://10.177.68.182:8083")
 public interface PostProxy {
     @GetMapping("post/getByUserId/{userId}")
-    List<PostDTO> postByUserId(@PathVariable("userId") Long userId);
+    List<PostDTO> postByUserId(@PathVariable("userId") String userId);
 
     @PostMapping("post/getPostsByUserIds")
-    List<PostDTO> getPostsByUserIds(@RequestBody List<Long> userId);
+    List<PostDTO> getPostsByUserIds(@RequestBody List<String> userId);
 }

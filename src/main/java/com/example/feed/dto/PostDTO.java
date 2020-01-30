@@ -11,9 +11,9 @@ import java.util.Date;
 @AllArgsConstructor
 @NoArgsConstructor
 public class PostDTO {
-    private long postId;
+    private String postId;
     private String category;
-    private long userId;
+    private String userId;
     private ContentDTO content;
     private Date timestamp;
 }

@@ -6,8 +6,8 @@ import com.example.feed.dto.PostDTO;
 import java.util.List;
 
 public interface FeedService {
-    FeedDTO getFeed(Long userId);
-    List<PostDTO> getFriendsFeed(Long userId);
-    Long addPostInFeedAfterActivity(PostActivityDTO postActivityDTO);
+    FeedDTO getFeed(String userId);
+    List<PostDTO> getFriendsFeed(String userId);
+    String addPostInFeedAfterActivity(PostActivityDTO postActivityDTO);
 
 }

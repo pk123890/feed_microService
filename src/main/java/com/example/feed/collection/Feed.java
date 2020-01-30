@@ -17,8 +17,8 @@ import java.util.List;
 @Document
 public class Feed {
     @Id
-    private long userId;
-    private List<Long> user2Ids;
+    private String userId;
+    private List<String> user2Ids;
     private List<PostDTO> postDTOList;
     private List<String> messages;
 }

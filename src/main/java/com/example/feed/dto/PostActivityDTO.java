@@ -12,5 +12,5 @@ import lombok.Setter;
 @NoArgsConstructor
 public class PostActivityDTO {
     private PostDTO postDTO;
-    private long userFriendId;
+    private String userFriendId;
 }

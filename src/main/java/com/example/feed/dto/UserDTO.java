@@ -14,7 +14,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserDTO {
-    private long userId;
+    private String userId;
     private String userName;
     private String imageUrl;
     private String gender;
@@ -24,6 +24,6 @@ public class UserDTO {
     private List<String> interests;
     private String profileType;
     private String displayType;
-    private HashSet<Long> friendIds;
-    private HashSet<Long> pendingFriendIds;
+    private HashSet<String> friendIds;
+    private HashSet<String> pendingFriendIds;
 }
