@@ -31,7 +31,7 @@ public class FeedServiceImpl implements FeedService {
     PostProxy postProxy;
 
     @Override
-    public FeedDTO getFeed(String userId) {
+    public FeedDTO  createFeed(String userId) {
         Feed feed = new Feed();
         FeedDTO feedDTO = new FeedDTO();
         List<PostDTO> postDTOList = postProxy.postByUserId(userId);
@@ -52,27 +52,36 @@ public class FeedServiceImpl implements FeedService {
 
     }
 
-    @Override
-    public List<PostDTO> getFriendsFeed(String userId) {
-        BaseResponse<UserDTO> userProxyFriendsList = userProxy.getFriendsList(userId);
-        HashSet<String> friendIds = userProxyFriendsList.getData().getFriendIds();
-        List<String> friendList = new ArrayList<>(friendIds);
-        List<PostDTO> postDTOList = postProxy.getPostsByUserIds(friendList);
-        return postDTOList;
-    }
+//    @Override
+//    public List<PostDTO> getFriendsFeed(String userId) {
+//        BaseResponse<UserDTO> userProxyFriendsList = userProxy.getFriendsList(userId);
+//        HashSet<String> friendIds = userProxyFriendsList.getData().getFriendIds();
+//        List<String> friendList = new ArrayList<>(friendIds);
+//        List<PostDTO> postDTOList = postProxy.getPostsByUserIds(friendList);
+//        return postDTOList;
+//    }
 
     @Override
     public String addPostInFeedAfterActivity(PostActivityDTO postActivityDTO) {
-        Feed feed = new Feed();
-        FeedDTO feedDTO = feedRepository.findByUserId(postActivityDTO.getUserFriendId());
-        List<PostDTO> postProxyList = new ArrayList<>();
+        Feed feed = feedRepository.findByUserId(postActivityDTO.getUserFriendId());
+        List<PostDTO> postProxyList=feed.getPostDTOList();
         List<String> messageList=new ArrayList<>();
         messageList.add(postActivityDTO.getMessage());
         postProxyList.add(postActivityDTO.getPostDTO());
-        feedDTO.setPostDTOList(postProxyList);
-        feedDTO.setMessages(messageList);
-        BeanUtils.copyProperties(feedDTO, feed);
+        feed.setPostDTOList(postProxyList);
+        feed.setMessages(messageList);
+
         feedRepository.save(feed);
         return feed.getUserId();
     }
+
+    @Override
+    public FeedDTO getFeed (String userId) {
+        FeedDTO feedDTO=new FeedDTO();
+        Feed feed=feedRepository.findByUserId(userId);
+        BeanUtils.copyProperties(feed,feedDTO);
+        return feedDTO;
+    }
+
+
 }

@@ -14,7 +14,7 @@ public class FeedController {
     @Autowired
     FeedService feedService;
 
-    @GetMapping("/getfeed/{userId}")
+    @GetMapping("/getFeed/{userId}")
     public FeedDTO getFeed(@PathVariable("userId") String userId) {
         FeedDTO feedDTO=feedService.getFeed(userId);
         return feedDTO;
@@ -24,5 +24,13 @@ public class FeedController {
     public String addPostAfterActivity(@RequestBody PostActivityDTO postActivityDTO){
         return feedService.addPostInFeedAfterActivity(postActivityDTO);
     }
+
+    @GetMapping("/createFeed/{userId}")
+    public FeedDTO createFeed(@PathVariable("userId")String userId){
+        FeedDTO feedDTO=feedService.createFeed(userId);
+        return feedDTO;
+    }
+
+
 
 }

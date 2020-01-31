@@ -14,7 +14,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Document
+@Document(value = "userfeed")
 public class Feed {
     @Id
     private String userId;
