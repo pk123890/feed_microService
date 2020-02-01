@@ -8,6 +8,7 @@ import com.example.feed.service.FeedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+@CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
 @RequestMapping("feed")
 public class FeedController {
@@ -21,7 +22,7 @@ public class FeedController {
     }
 
     @PostMapping("/addPostAfterActivity")
-    public String addPostAfterActivity(@RequestBody PostActivityDTO postActivityDTO){
+    public FeedDTO addPostAfterActivity(@RequestBody PostActivityDTO postActivityDTO){
         return feedService.addPostInFeedAfterActivity(postActivityDTO);
     }
 
@@ -31,6 +32,11 @@ public class FeedController {
         return feedDTO;
     }
 
+    @GetMapping("createNewFeed/{userId}")
+    public String createNewFeed(@PathVariable("userId")String userId){
+        FeedDTO feedDTO=feedService.createNewFeed(userId);
+        return feedDTO.getUserId();
+    }
 
 
 }

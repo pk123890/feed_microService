@@ -8,8 +8,9 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 
 import java.util.List;
+import java.util.Set;
 
-@FeignClient(name = "post", url = "http://10.177.68.182:8083")
+@FeignClient(name = "post", url = "http://172.16.20.82:8083")
 public interface PostProxy {
     @GetMapping("post/getByUserId/{userId}")
     List<PostDTO> postByUserId(@PathVariable("userId") String userId);

@@ -8,7 +8,8 @@ import java.util.List;
 public interface FeedService {
     FeedDTO getFeed(String userId);
 //    List<PostDTO> getFriendsFeed(String userId);
-    String addPostInFeedAfterActivity(PostActivityDTO postActivityDTO);
+    FeedDTO addPostInFeedAfterActivity(PostActivityDTO postActivityDTO);
     FeedDTO createFeed(String userId);
+    FeedDTO createNewFeed(String userId);
 
 }

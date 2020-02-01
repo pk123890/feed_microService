@@ -14,4 +14,6 @@ public class PostActivityDTO {
     private PostDTO postDTO;
     private String userFriendId;
     private String message;
+    private String userName;
+    private String imageUrl;
 }

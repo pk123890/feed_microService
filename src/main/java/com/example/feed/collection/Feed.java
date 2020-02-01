@@ -1,6 +1,7 @@
 package com.example.feed.collection;
 
 import com.example.feed.dto.PostDTO;
+import com.example.feed.dto.PostUserDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,8 @@ public class Feed {
     @Id
     private String userId;
     private List<String> user2Ids;
-    private List<PostDTO> postDTOList;
+    private List<PostUserDTO> postUserDTOList;
     private List<String> messages;
+
+
 }

@@ -8,8 +8,10 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 
 
-@FeignClient(name = "user", url = "http://10.177.68.178:8082")
+@FeignClient(name = "user", url = "http://172.16.20.180:8082")
 public interface UserProxy {
     @GetMapping("user/getUserDetails/{userId}")
     BaseResponse<UserDTO> getFriendsList(@PathVariable(value = "userId") String userId);
+    @GetMapping("user/getUserDetails/{userId}")
+    BaseResponse<UserDTO> getUserDetailsById(@PathVariable(value = "userId") String userId);
 }
