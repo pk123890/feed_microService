@@ -10,12 +10,7 @@ import com.example.feed.service.FeedService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.*;
 
 @Service
 public class FeedServiceImpl implements FeedService {
@@ -33,7 +28,7 @@ public class FeedServiceImpl implements FeedService {
 
         BaseResponse<UserDTO> userProxyFriends = userProxy.getFriendsList(userId);
         List<PostUserDTO> postUserDTOList = new ArrayList<>();
-        if(userProxyFriends.getData().getFriendIds()!=null) {
+        if (!userProxyFriends.getData().getFriendIds().contains("")) {
             HashSet<String> friendIds = userProxyFriends.getData().getFriendIds();
             List<String> friendList = new ArrayList<>(friendIds);
             List<BaseResponse<UserDTO>> friendsdetails = new ArrayList<>();
@@ -43,25 +38,22 @@ public class FeedServiceImpl implements FeedService {
                 friendsdetails.add(userProxy.getFriendsList(friendId));
             }
             List<PostDTO> friendsPostDTOList = postProxy.getPostsByUserIds(friendList);
+
             for (PostDTO postDTO : friendsPostDTOList) {
-                PostUserDTO postUserDTO=new PostUserDTO();
+                PostUserDTO postUserDTO = new PostUserDTO();
                 postUserDTO.setPostDTO(postDTO);
-                postUserDTO.setUserName(userProxyFriends.getData().getUserName());
-                postUserDTO.setImageUrl(userProxyFriends.getData().getImageUrl());
+                postUserDTO.setUserName(friendsdetails.get(0).getData().getUserName());
+                postUserDTO.setImageUrl(friendsdetails.get(0).getData().getImageUrl());
                 friendsPostUserDTOList.add(postUserDTO);
+
             }
 
             postUserDTOList.addAll(friendsPostUserDTOList);
         }
 
         List<PostDTO> postDTOList = postProxy.postByUserId(userId);
-
-
-
-
-
         for (PostDTO postDTO : postDTOList) {
-            PostUserDTO postUserDTO=new PostUserDTO();
+            PostUserDTO postUserDTO = new PostUserDTO();
             postUserDTO.setPostDTO(postDTO);
             postUserDTO.setUserName(userProxyFriends.getData().getUserName());
             postUserDTO.setImageUrl(userProxyFriends.getData().getImageUrl());
@@ -69,11 +61,9 @@ public class FeedServiceImpl implements FeedService {
         }
 
 
-
-
         Feed feed = feedRepository.findByUserId(userId);
         FeedDTO feedDTO = new FeedDTO();
-        List<String> user2IdsList=new ArrayList<>();
+        List<String> user2IdsList = new ArrayList<>();
 
 
         List<String> messagesList = new ArrayList<>();
@@ -94,54 +84,87 @@ public class FeedServiceImpl implements FeedService {
     }
 
     @Override
-    public FeedDTO createNewFeed(String userId) {
-        Feed feed =new Feed();
-        feed.setUserId(userId);
-        feed.setPostUserDTOList(null);
-        feed.setMessages(null);
-        feed.setUser2Ids(null);
-        feedRepository.save(feed);
-        FeedDTO feedDTO=new FeedDTO();
-        BeanUtils.copyProperties(feed,feedDTO);
-        return feedDTO;
+    public void createNewFeed(NewUserDataDto newUserDataDto)
+    {
+        Feed feed = new Feed();
+        feed.setUserId(newUserDataDto.getUserId());
+        feed.setImageUrl(newUserDataDto.getImageUrl());
+        feed.setUserName(newUserDataDto.getUserName());
+        feedRepository.insert(feed);
     }
 
     @Override
-    public FeedDTO addPostInFeedAfterActivity(PostActivityDTO postActivityDTO) {
-        Feed feed = feedRepository.findByUserId(postActivityDTO.getUserFriendId());
-        Feed feed1 = feedRepository.findByUserId(postActivityDTO.getPostDTO().getUserId());
+    public void addPostInFeedAfterActivity(PostActivityDTO postActivityDTO)
+    {
+        if(!postActivityDTO.getUserFriendId().equals("empty"))
+        {
+            Feed feed = feedRepository.findByUserId(postActivityDTO.getUserFriendId());
 
-        FeedDTO feedDTO = new FeedDTO();
-        PostUserDTO postUserDTO = new PostUserDTO();
+            PostUserDTO postUserDTO = new PostUserDTO();
+            postUserDTO.setMessage(postActivityDTO.getMessage());
+            postUserDTO.setPostDTO(postActivityDTO.getPostDTO());
+            postUserDTO.setFriendId(postActivityDTO.getUserFriendId());
 
-        List<String> messages=feed1.getMessages();
-        List<PostUserDTO> postUserDTOList = feed.getPostUserDTOList();
-        List<String> user2IdsList = feed1.getUser2Ids();
 
-        String user2Id = postActivityDTO.getUserFriendId();
-        String message=postActivityDTO.getMessage();
 
-        messages.add(message);
-        user2IdsList.add(user2Id);
+           /* List<String> messages = feed1.getMessages();
+            List<PostUserDTO> postUserDTOList = feed.getPostUserDTOList();
+            List<String> user2IdsList = feed1.getUser2Ids();
 
-        BaseResponse<UserDTO> userProxyFriends = userProxy.getFriendsList(postActivityDTO.getPostDTO().getUserId());
+            String user2Id = postActivityDTO.getUserFriendId();
+            String message = postActivityDTO.getMessage();
 
-        postUserDTO.setPostDTO(postActivityDTO.getPostDTO());
-        postUserDTO.setUserName(userProxyFriends.getData().getUserName());
-        postUserDTO.setImageUrl(userProxyFriends.getData().getImageUrl());
-        postUserDTOList.add(postUserDTO);
-        feed.setPostUserDTOList(postUserDTOList);
+            messages.add(message);
+            user2IdsList.add(user2Id);*/
 
-        BeanUtils.copyProperties(feed, feedDTO);
-        return feedDTO;
+
+
+            BaseResponse<UserDTO> userProxyFriends = userProxy.getFriendsList(postActivityDTO.getUserFriendId());
+            UserDTO userDTO = userProxyFriends.getData();
+
+            HashSet<String> friendList = userDTO.getFriendIds();
+
+            for(String id : friendList)
+            {
+                FeedDTO feedDTO = new FeedDTO();
+                Feed friendFeed = feedRepository.findByUserId(id);
+                if(friendFeed.getPostDetails()==null)
+                {
+                    List<PostUserDTO> postUserDTOS = new ArrayList<>();
+                    postUserDTOS.add(postUserDTO);
+                    friendFeed.setPostDetails(postUserDTOS);
+                    feedRepository.save(friendFeed);
+                }
+                else {
+                    List<PostUserDTO> postUserDTOS = friendFeed.getPostDetails();
+                    postUserDTOS.add(postUserDTO);
+                    friendFeed.setPostDetails(postUserDTOS);
+                    feedRepository.save(friendFeed);
+                }
+            }
+
+
+            postUserDTO.setPostDTO(postActivityDTO.getPostDTO());
+            postUserDTO.setUserName(userProxyFriends.getData().getUserName());
+            postUserDTO.setImageUrl(userProxyFriends.getData().getImageUrl());
+            postUserDTOList.add(postUserDTO);
+            feed.setPostUserDTOList(postUserDTOList);
+
+            BeanUtils.copyProperties(feed, feedDTO);
+        }
+        else
+        {
+
+        }
+
     }
 
     @Override
-    public FeedDTO getFeed(String userId) {
-        FeedDTO feedDTO = new FeedDTO();
+    public Feed getFeed(String userId) {
+//        FeedDTO feedDTO = new FeedDTO();
         Feed feed = feedRepository.findByUserId(userId);
-        BeanUtils.copyProperties(feed,feedDTO);
-        return feedDTO;
+
+        return feed;
     }
 
 

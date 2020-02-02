@@ -19,9 +19,7 @@ import java.util.List;
 public class Feed {
     @Id
     private String userId;
-    private List<String> user2Ids;
-    private List<PostUserDTO> postUserDTOList;
-    private List<String> messages;
-
-
+    private String userName;
+    private String imageUrl;
+    private List<PostUserDTO> postDetails;
 }

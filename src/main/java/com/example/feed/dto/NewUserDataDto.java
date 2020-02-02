@@ -5,15 +5,13 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-
-
 @Getter
 @Setter
-@AllArgsConstructor
 @NoArgsConstructor
-public class PostUserDTO
-{
-    private PostDTO postDTO;
-    private String friendId;
-    private String message;
+@AllArgsConstructor
+public class NewUserDataDto {
+
+    String userId;
+    String userName;
+    String imageUrl;
 }

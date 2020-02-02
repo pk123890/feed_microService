@@ -19,7 +19,7 @@ public class UserDTO {
     private String imageUrl;
     private String gender;
     private String email;
-    private Date DOB;
+    private String DOB;
     private Long mobileNumber;
     private List<String> interests;
     private String profileType;

@@ -16,4 +16,5 @@ public class PostDTO {
     private String userId;
     private ContentDTO content;
     private Date timestamp;
+    private int likeCount;
 }

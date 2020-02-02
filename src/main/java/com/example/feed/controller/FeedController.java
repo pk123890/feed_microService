@@ -1,7 +1,9 @@
 package com.example.feed.controller;
 
 
+import com.example.feed.collection.Feed;
 import com.example.feed.dto.FeedDTO;
+import com.example.feed.dto.NewUserDataDto;
 import com.example.feed.dto.PostActivityDTO;
 import com.example.feed.dto.PostDTO;
 import com.example.feed.service.FeedService;
@@ -16,9 +18,9 @@ public class FeedController {
     FeedService feedService;
 
     @GetMapping("/getFeed/{userId}")
-    public FeedDTO getFeed(@PathVariable("userId") String userId) {
-        FeedDTO feedDTO=feedService.getFeed(userId);
-        return feedDTO;
+    public Feed getFeed(@PathVariable("userId") String userId) {
+        Feed feed=feedService.getFeed(userId);
+        return feed;
     }
 
     @PostMapping("/addPostAfterActivity")
@@ -32,9 +34,9 @@ public class FeedController {
         return feedDTO;
     }
 
-    @GetMapping("createNewFeed/{userId}")
-    public String createNewFeed(@PathVariable("userId")String userId){
-        FeedDTO feedDTO=feedService.createNewFeed(userId);
+    @GetMapping("createNewFeed")
+    public String createNewFeed(@RequestBody NewUserDataDto newUserDataDto){
+        FeedDTO feedDTO=feedService.createNewFeed(newUserDataDto);
         return feedDTO.getUserId();
     }
 
