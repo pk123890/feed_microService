@@ -73,3 +73,4 @@ public class FeedServiceImpl implements FeedService {
         return feed.getUserId();
     }
 }
+
