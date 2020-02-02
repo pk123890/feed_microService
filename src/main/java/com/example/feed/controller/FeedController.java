@@ -24,20 +24,19 @@ public class FeedController {
     }
 
     @PostMapping("/addPostAfterActivity")
-    public FeedDTO addPostAfterActivity(@RequestBody PostActivityDTO postActivityDTO){
-        return feedService.addPostInFeedAfterActivity(postActivityDTO);
+    public void addPostAfterActivity(@RequestBody PostActivityDTO postActivityDTO){
+        feedService.addPostInFeedAfterActivity(postActivityDTO);
     }
 
     @GetMapping("/createFeed/{userId}")
-    public FeedDTO createFeed(@PathVariable("userId")String userId){
-        FeedDTO feedDTO=feedService.createFeed(userId);
-        return feedDTO;
+    public void createFeed(@PathVariable("userId")String userId){
+        feedService.createFeed(userId);
     }
 
     @GetMapping("createNewFeed")
     public String createNewFeed(@RequestBody NewUserDataDto newUserDataDto){
-        FeedDTO feedDTO=feedService.createNewFeed(newUserDataDto);
-        return feedDTO.getUserId();
+        feedService.createNewFeed(newUserDataDto);
+        return "New User Feed Created";
     }
 
 
