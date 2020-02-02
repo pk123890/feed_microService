@@ -2,13 +2,12 @@ package com.example.feed.controller;
 
 
 import com.example.feed.collection.Feed;
-import com.example.feed.dto.FeedDTO;
-import com.example.feed.dto.NewUserDataDto;
-import com.example.feed.dto.PostActivityDTO;
-import com.example.feed.dto.PostDTO;
+import com.example.feed.dto.*;
 import com.example.feed.service.FeedService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 @RestController
@@ -29,11 +28,11 @@ public class FeedController {
     }
 
     @GetMapping("/createFeed/{userId}")
-    public void createFeed(@PathVariable("userId")String userId){
-        feedService.createFeed(userId);
+    public List<UserFeedDto> createFeed(@PathVariable("userId")String userId){
+        return feedService.createFeed(userId);
     }
 
-    @GetMapping("createNewFeed")
+    @PostMapping("createNewFeed")
     public String createNewFeed(@RequestBody NewUserDataDto newUserDataDto){
         feedService.createNewFeed(newUserDataDto);
         return "New User Feed Created";
